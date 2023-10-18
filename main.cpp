@@ -131,42 +131,78 @@ auto fLinha(vector<vector<string>> cubo) {
 
 int calculaPeso(vector<vector<string>> cubo) {
     int peso = 0;
-    for (int i = 0; i <= 1; i++) {
-        for (int j = 2; j <= 3; j++) {
-            if (cubo[i][j] == "Y") peso += 2;
-            else if (cubo[i][j] != "W") peso += 1;
-        }
-    }
-    for (int i = 2; i <= 3; i++) {
-        for (int j = 0; j <= 1; j++) {
-            if (cubo[i][j] == "O") peso += 2;
-            else if (cubo[i][j] != "R") peso += 1;
-        }
-    }
-    for (int i = 2; i <= 3; i++) {
-        for (int j = 2; j <= 3; j++) {
-            if (cubo[i][j] == "B") peso += 2;
-            else if (cubo[i][j] != "G") peso += 1;
-        }
-    }
-    for (int i = 2; i <= 3; i++) {
-        for (int j = 4; j <= 5; j++) {
-            if (cubo[i][j] == "R") peso += 2;
-            else if (cubo[i][j] != "O") peso += 1;
-        }
-    }
-    for (int i = 2; i <= 3; i++) {
-        for (int j = 6; j <= 7; j++) {
-            if (cubo[i][j] == "G") peso += 2;
-            else if (cubo[i][j] != "B") peso += 1;
-        }
-    }
-    for (int i = 4; i <= 5; i++) {
-        for (int j = 2; j <= 3; j++) {
-            if (cubo[i][j] == "W") peso += 2;
-            else if (cubo[i][j] != "Y") peso += 1;
-        }
-    }
+    if (cubo[0][2] == "Y" && cubo[2][0] == "O" && cubo[2][7] == "G") peso += 3;
+    else if (cubo[0][2] == "Y") peso += 2;
+    else if (cubo[0][2] != "W") peso += 1;
+    if (cubo[0][3] == "Y" && cubo[2][5] == "R" && cubo[2][6] == "G") peso += 3;
+    else if (cubo[0][3] == "Y") peso += 2;
+    else if (cubo[0][3] != "W") peso += 1;
+    if (cubo[1][2] == "Y" && cubo[2][1] == "O" && cubo[2][2] == "B") peso += 3;
+    else if (cubo[1][2] == "Y") peso += 2;
+    else if (cubo[1][2] != "W") peso += 1;
+    if (cubo[1][3] == "Y" && cubo[2][3] == "B" && cubo[2][4] == "R") peso += 3;
+    else if (cubo[1][3] == "Y") peso += 2;
+    else if (cubo[1][3] != "W") peso += 1;
+    if (cubo[2][0] == "O" && cubo[0][2] == "Y" && cubo[2][7] == "G") peso += 3;
+    else if (cubo[2][0] == "O") peso += 2;
+    else if (cubo[2][0] != "R") peso += 1;
+    if (cubo[2][1] == "O" && cubo[1][2] == "Y" && cubo[2][2] == "B") peso += 3;
+    else if (cubo[2][1] == "O") peso += 2;
+    else if (cubo[2][1] != "R") peso += 1;
+    if (cubo[3][0] == "O" && cubo[5][2] == "W" && cubo[3][7] == "G") peso += 3;
+    else if (cubo[3][0] == "O") peso += 2;
+    else if (cubo[3][0] != "R") peso += 1;
+    if (cubo[3][1] == "O" && cubo[3][2] == "B" && cubo[4][2] == "W") peso += 3;
+    else if (cubo[3][1] == "O") peso += 2;
+    else if (cubo[3][1] != "R") peso += 1;
+    if (cubo[2][2] == "B" && cubo[1][2] == "Y" && cubo[2][1] == "O") peso += 3;
+    else if (cubo[2][2] == "B") peso += 2;
+    else if (cubo[2][2] != "G") peso += 1;
+    if (cubo[2][3] == "B" && cubo[1][3] == "Y" && cubo[2][4] == "R") peso += 3;
+    else if (cubo[2][3] == "B") peso += 2;
+    else if (cubo[2][3] != "G") peso += 1;
+    if (cubo[3][2] == "B" && cubo[3][1] == "O" && cubo[4][2] == "W") peso += 3;
+    else if (cubo[3][2] == "B") peso += 2;
+    else if (cubo[3][2] != "G") peso += 1;
+    if (cubo[3][3] == "B" && cubo[3][4] == "R" && cubo[4][3] == "W") peso += 3;
+    else if (cubo[3][3] == "B") peso += 2;
+    else if (cubo[3][3] != "G") peso += 1;
+    if (cubo[2][4] == "R" && cubo[1][3] == "Y" && cubo[2][3] == "B") peso += 3;
+    else if (cubo[2][4] == "R") peso += 2;
+    else if (cubo[2][4] != "O") peso += 1;
+    if (cubo[2][5] == "R" && cubo[0][3] == "Y" && cubo[2][6] == "G") peso += 3;
+    else if (cubo[2][5] == "R") peso += 2;
+    else if (cubo[2][5] != "O") peso += 1;
+    if (cubo[3][4] == "R" && cubo[3][3] == "B" && cubo[4][3] == "W") peso += 3;
+    else if (cubo[3][4] == "R") peso += 2;
+    else if (cubo[3][4] != "O") peso += 1;
+    if (cubo[3][5] == "R" && cubo[3][6] == "G" && cubo[5][3] == "W") peso += 3;
+    else if (cubo[3][5] == "R") peso += 2;
+    else if (cubo[3][5] != "O") peso += 1;
+    if (cubo[2][6] == "G" && cubo[0][3] == "Y" && cubo[2][5] == "R") peso += 3;
+    else if (cubo[2][6] == "G") peso += 2;
+    else if (cubo[2][6] != "B") peso += 1;
+    if (cubo[2][7] == "G" && cubo[0][2] == "Y" && cubo[2][0] == "O") peso += 3;
+    else if (cubo[2][7] == "G") peso += 2;
+    else if (cubo[2][7] != "B") peso += 1;
+    if (cubo[3][6] == "G" && cubo[3][5] == "R" && cubo[5][3] == "W") peso += 3;
+    else if (cubo[3][6] == "G") peso += 2;
+    else if (cubo[3][6] != "B") peso += 1;
+    if (cubo[3][7] == "G" && cubo[3][0] == "O" && cubo[5][2] == "W") peso += 3;
+    else if (cubo[3][7] == "G") peso += 2;
+    else if (cubo[3][7] != "B") peso += 1;
+    if (cubo[4][2] == "W" && cubo[3][1] == "O" && cubo[3][2] == "B") peso += 3;
+    else if (cubo[4][2] == "W") peso += 2;
+    else if (cubo[4][2] != "Y") peso += 1;
+    if (cubo[4][3] == "W" && cubo[3][3] == "B" && cubo[3][4] == "R") peso += 3;
+    else if (cubo[4][3] == "W") peso += 2;
+    else if (cubo[4][3] != "Y") peso += 1;
+    if (cubo[5][2] == "W" && cubo[3][0] == "O" && cubo[3][7] == "G") peso += 3;
+    else if (cubo[5][2] == "W") peso += 2;
+    else if (cubo[5][2] != "Y") peso += 1;
+    if (cubo[5][3] == "W" && cubo[3][5] == "R" && cubo[3][6] == "G") peso += 3;
+    else if (cubo[5][3] == "W") peso += 2;
+    else if (cubo[5][3] != "Y") peso += 1;
     return peso;
 }
 
@@ -195,10 +231,10 @@ auto buscaSolucao(vector<vector<string>> cubo) {
     while (!pq.empty()) {
         auto front = pq.top();
         pq.pop();
-        if (front.first == 48) return front.second.first;
+        if (front.first == 72) return front.second.first;
         vector<string> movimentos = front.second.first;
         int movimentosSize = movimentos.size();
-        if (movimentosSize == 44) continue;
+        if (movimentosSize == 14) continue;
         cubo = front.second.second;
         string movimentoPai = movimentos[movimentosSize - 1];
         movimentos.push_back("");
