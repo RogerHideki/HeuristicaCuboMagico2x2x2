@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-#include <set>
+#include <unordered_set>
 #include <unordered_map>
 
 using namespace std;
@@ -232,7 +232,7 @@ lli calculaID(vvs &estado) {
 
 vector<string> buscaSolucao(vvs estado) {
     priority_queue<pair<int, pair<vector<string>, vvs>>> pq;
-    set<lli> visitados;
+    unordered_set<lli> visitados;
     visitados.insert(calculaID(estado));
     u(estado);
     pq.push({calculaPeso(estado), {{"U"}, estado}});
