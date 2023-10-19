@@ -21,7 +21,7 @@ void imprime(vvs &estado) {
     cout << '\n';
 }
 
-vvs u(vvs estado) {
+void u(vvs &estado) {
     string aux = estado[0][2];
     estado[0][2] = estado[1][2];
     estado[1][2] = estado[1][3];
@@ -37,10 +37,9 @@ vvs u(vvs estado) {
     estado[2][3] = estado[2][5];
     estado[2][5] = estado[2][7];
     estado[2][7] = aux;
-    return estado;
 }
 
-vvs uLinha(vvs estado) {
+void uLinha(vvs &estado) {
     string aux = estado[0][2];
     estado[0][2] = estado[0][3];
     estado[0][3] = estado[1][3];
@@ -56,10 +55,9 @@ vvs uLinha(vvs estado) {
     estado[2][4] = estado[2][2];
     estado[2][2] = estado[2][0];
     estado[2][0] = aux;
-    return estado;
 }
 
-vvs r(vvs estado) {
+void r(vvs &estado) {
     string aux = estado[2][5];
     estado[2][5] = estado[2][4];
     estado[2][4] = estado[3][4];
@@ -75,10 +73,9 @@ vvs r(vvs estado) {
     estado[3][3] = estado[5][3];
     estado[5][3] = estado[2][6];
     estado[2][6] = aux;
-    return estado;
 }
 
-vvs rLinha(vvs estado) {
+void rLinha(vvs &estado) {
     string aux = estado[2][5];
     estado[2][5] = estado[3][5];
     estado[3][5] = estado[3][4];
@@ -94,10 +91,9 @@ vvs rLinha(vvs estado) {
     estado[4][3] = estado[2][3];
     estado[2][3] = estado[0][3];
     estado[0][3] = aux;
-    return estado;
 }
 
-vvs f(vvs estado) {
+void f(vvs &estado) {
     string aux = estado[2][3];
     estado[2][3] = estado[2][2];
     estado[2][2] = estado[3][2];
@@ -113,10 +109,9 @@ vvs f(vvs estado) {
     estado[3][1] = estado[4][3];
     estado[4][3] = estado[2][4];
     estado[2][4] = aux;
-    return estado;
 }
 
-vvs fLinha(vvs estado) {
+void fLinha(vvs &estado) {
     string aux = estado[2][3];
     estado[2][3] = estado[3][3];
     estado[3][3] = estado[3][2];
@@ -132,7 +127,6 @@ vvs fLinha(vvs estado) {
     estado[4][2] = estado[2][1];
     estado[2][1] = estado[1][3];
     estado[1][3] = aux;
-    return estado;
 }
 
 int calculaPeso(vvs &estado) {
@@ -236,28 +230,33 @@ lli calculaID(vvs &estado) {
     return id;
 }
 
-vector<string> buscaSolucao(vvs &estado) {
+vector<string> buscaSolucao(vvs estado) {
     priority_queue<pair<int, pair<vector<string>, vvs>>> pq;
     set<lli> visitados;
     visitados.insert(calculaID(estado));
-    auto novoCubo = u(estado);
-    pq.push({calculaPeso(novoCubo), {{"U"}, novoCubo}});
-    visitados.insert(calculaID(novoCubo));
-    novoCubo = uLinha(estado);
-    pq.push({calculaPeso(novoCubo), {{"U'"}, novoCubo}});
-    visitados.insert(calculaID(novoCubo));
-    novoCubo = r(estado);
-    pq.push({calculaPeso(novoCubo), {{"R"}, novoCubo}});
-    visitados.insert(calculaID(novoCubo));
-    novoCubo = rLinha(estado);
-    pq.push({calculaPeso(novoCubo), {{"R'"}, novoCubo}});
-    visitados.insert(calculaID(novoCubo));
-    novoCubo = f(estado);
-    pq.push({calculaPeso(novoCubo), {{"F"}, novoCubo}});
-    visitados.insert(calculaID(novoCubo));
-    novoCubo = fLinha(estado);
-    pq.push({calculaPeso(novoCubo), {{"F'"}, novoCubo}});
-    visitados.insert(calculaID(novoCubo));
+    u(estado);
+    pq.push({calculaPeso(estado), {{"U"}, estado}});
+    visitados.insert(calculaID(estado));
+    uLinha(estado);
+    uLinha(estado);
+    pq.push({calculaPeso(estado), {{"U'"}, estado}});
+    visitados.insert(calculaID(estado));
+    u(estado);
+    r(estado);
+    pq.push({calculaPeso(estado), {{"R"}, estado}});
+    visitados.insert(calculaID(estado));
+    rLinha(estado);
+    rLinha(estado);
+    pq.push({calculaPeso(estado), {{"R'"}, estado}});
+    visitados.insert(calculaID(estado));
+    r(estado);
+    f(estado);
+    pq.push({calculaPeso(estado), {{"F"}, estado}});
+    visitados.insert(calculaID(estado));
+    fLinha(estado);
+    fLinha(estado);
+    pq.push({calculaPeso(estado), {{"F'"}, estado}});
+    visitados.insert(calculaID(estado));
     while (!pq.empty()) {
         auto front = pq.top();
         pq.pop();
@@ -265,50 +264,61 @@ vector<string> buscaSolucao(vvs &estado) {
         vector<string> movimentos = front.second.first;
         int movimentosSize = movimentos.size();
         if (movimentosSize == 14) continue;
-        auto estadoAtual = front.second.second;
+        estado = front.second.second;
         string movimentoPai = movimentos[movimentosSize - 1];
         movimentos.push_back("");
-        novoCubo = u(estadoAtual);
-        auto it = visitados.find(calculaID(novoCubo));
+        u(estado);
+        lli id = calculaID(estado);
+        auto it = visitados.find(id);
         if (movimentoPai != "U'" && it == visitados.end()) {
             movimentos[movimentosSize] = "U";
-            pq.push({calculaPeso(novoCubo), {movimentos, novoCubo}});
-            visitados.insert(calculaID(novoCubo));
+            pq.push({calculaPeso(estado), {movimentos, estado}});
+            visitados.insert(id);
         }
-        novoCubo = uLinha(estadoAtual);
-        it = visitados.find(calculaID(novoCubo));
+        uLinha(estado);
+        uLinha(estado);
+        id = calculaID(estado);
+        it = visitados.find(id);
         if (movimentoPai != "U" && it == visitados.end()) {
             movimentos[movimentosSize] = "U'";
-            pq.push({calculaPeso(novoCubo), {movimentos, novoCubo}});
-            visitados.insert(calculaID(novoCubo));
+            pq.push({calculaPeso(estado), {movimentos, estado}});
+            visitados.insert(id);
         }
-        novoCubo = r(estadoAtual);
-        it = visitados.find(calculaID(novoCubo));
+        u(estado);
+        r(estado);
+        id = calculaID(estado);
+        it = visitados.find(id);
         if (movimentoPai != "R'" && it == visitados.end()) {
             movimentos[movimentosSize] = "R";
-            pq.push({calculaPeso(novoCubo), {movimentos, novoCubo}});
-            visitados.insert(calculaID(novoCubo));
+            pq.push({calculaPeso(estado), {movimentos, estado}});
+            visitados.insert(id);
         }
-        novoCubo = rLinha(estadoAtual);
-        it = visitados.find(calculaID(novoCubo));
+        rLinha(estado);
+        rLinha(estado);
+        id = calculaID(estado);
+        it = visitados.find(id);
         if (movimentoPai != "R" && it == visitados.end()) {
             movimentos[movimentosSize] = "R'";
-            pq.push({calculaPeso(novoCubo), {movimentos, novoCubo}});
-            visitados.insert(calculaID(novoCubo));
+            pq.push({calculaPeso(estado), {movimentos, estado}});
+            visitados.insert(id);
         }
-        novoCubo = f(estadoAtual);
-        it = visitados.find(calculaID(novoCubo));
+        r(estado);
+        f(estado);
+        id = calculaID(estado);
+        it = visitados.find(id);
         if (movimentoPai != "F'" && it == visitados.end()) {
             movimentos[movimentosSize] = "F";
-            pq.push({calculaPeso(novoCubo), {movimentos, novoCubo}});
-            visitados.insert(calculaID(novoCubo));
+            pq.push({calculaPeso(estado), {movimentos, estado}});
+            visitados.insert(id);
         }
-        novoCubo = fLinha(estadoAtual);
-        it = visitados.find(calculaID(novoCubo));
+        fLinha(estado);
+        fLinha(estado);
+        id = calculaID(estado);
+        it = visitados.find(id);
         if (movimentoPai != "F" && it == visitados.end()) {
             movimentos[movimentosSize] = "F'";
-            pq.push({calculaPeso(novoCubo), {movimentos, novoCubo}});
-            visitados.insert(calculaID(novoCubo));
+            pq.push({calculaPeso(estado), {movimentos, estado}});
+            visitados.insert(id);
         }
     }
 }
@@ -320,7 +330,7 @@ int main() {
     m["R"] = 3;
     m["G"] = 4;
     m["W"] = 5;
-    vvs estadoInicial = {                             //CUBO RESOLVIDO:
+    vvs estadoInicial = {                                       //CUBO RESOLVIDO:
             {" ", " ", "G", "R", " ", " ", " ", " "},           //{" ", " ", "Y", "Y", " ", " ", " ", " "},
             {" ", " ", "W", "G", " ", " ", " ", " "},           //{" ", " ", "Y", "Y", " ", " ", " ", " "},
             {"R", "G", "R", "O", "Y", "B", "W", "Y"},           //{"O", "O", "B", "B", "R", "R", "G", "G"},
