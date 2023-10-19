@@ -267,58 +267,72 @@ vector<string> buscaSolucao(vvs estado) {
         estado = front.second.second;
         string movimentoPai = movimentos[movimentosSize - 1];
         movimentos.push_back("");
-        u(estado);
-        lli id = calculaID(estado);
-        auto it = visitados.find(id);
-        if (movimentoPai != "U'" && it == visitados.end()) {
-            movimentos[movimentosSize] = "U";
-            pq.push({calculaPeso(estado), {movimentos, estado}});
-            visitados.insert(id);
+        lli id;
+        unordered_set<lli>::iterator it;
+        if (movimentoPai != "U'") {
+            u(estado);
+            id = calculaID(estado);
+            it = visitados.find(id);
+            if (it == visitados.end()) {
+                movimentos[movimentosSize] = "U";
+                pq.push({calculaPeso(estado), {movimentos, estado}});
+                visitados.insert(id);
+            }
+            uLinha(estado);
         }
-        uLinha(estado);
-        uLinha(estado);
-        id = calculaID(estado);
-        it = visitados.find(id);
-        if (movimentoPai != "U" && it == visitados.end()) {
-            movimentos[movimentosSize] = "U'";
-            pq.push({calculaPeso(estado), {movimentos, estado}});
-            visitados.insert(id);
+        if (movimentoPai != "U") {
+            uLinha(estado);
+            id = calculaID(estado);
+            it = visitados.find(id);
+            if (it == visitados.end()) {
+                movimentos[movimentosSize] = "U'";
+                pq.push({calculaPeso(estado), {movimentos, estado}});
+                visitados.insert(id);
+            }
+            u(estado);
         }
-        u(estado);
-        r(estado);
-        id = calculaID(estado);
-        it = visitados.find(id);
-        if (movimentoPai != "R'" && it == visitados.end()) {
-            movimentos[movimentosSize] = "R";
-            pq.push({calculaPeso(estado), {movimentos, estado}});
-            visitados.insert(id);
+        if (movimentoPai != "R'") {
+            r(estado);
+            id = calculaID(estado);
+            it = visitados.find(id);
+            if (it == visitados.end()) {
+                movimentos[movimentosSize] = "R";
+                pq.push({calculaPeso(estado), {movimentos, estado}});
+                visitados.insert(id);
+            }
+            rLinha(estado);
         }
-        rLinha(estado);
-        rLinha(estado);
-        id = calculaID(estado);
-        it = visitados.find(id);
-        if (movimentoPai != "R" && it == visitados.end()) {
-            movimentos[movimentosSize] = "R'";
-            pq.push({calculaPeso(estado), {movimentos, estado}});
-            visitados.insert(id);
+        if (movimentoPai != "R") {
+            rLinha(estado);
+            id = calculaID(estado);
+            it = visitados.find(id);
+            if (it == visitados.end()) {
+                movimentos[movimentosSize] = "R'";
+                pq.push({calculaPeso(estado), {movimentos, estado}});
+                visitados.insert(id);
+            }
+            r(estado);
         }
-        r(estado);
-        f(estado);
-        id = calculaID(estado);
-        it = visitados.find(id);
-        if (movimentoPai != "F'" && it == visitados.end()) {
-            movimentos[movimentosSize] = "F";
-            pq.push({calculaPeso(estado), {movimentos, estado}});
-            visitados.insert(id);
+        if (movimentoPai != "F'") {
+            f(estado);
+            id = calculaID(estado);
+            it = visitados.find(id);
+            if (it == visitados.end()) {
+                movimentos[movimentosSize] = "F";
+                pq.push({calculaPeso(estado), {movimentos, estado}});
+                visitados.insert(id);
+            }
+            fLinha(estado);
         }
-        fLinha(estado);
-        fLinha(estado);
-        id = calculaID(estado);
-        it = visitados.find(id);
-        if (movimentoPai != "F" && it == visitados.end()) {
-            movimentos[movimentosSize] = "F'";
-            pq.push({calculaPeso(estado), {movimentos, estado}});
-            visitados.insert(id);
+        if (movimentoPai != "F") {
+            fLinha(estado);
+            id = calculaID(estado);
+            it = visitados.find(id);
+            if (it == visitados.end()) {
+                movimentos[movimentosSize] = "F'";
+                pq.push({calculaPeso(estado), {movimentos, estado}});
+                visitados.insert(id);
+            }
         }
     }
 }
