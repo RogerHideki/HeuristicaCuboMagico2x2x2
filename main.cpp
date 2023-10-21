@@ -2,6 +2,7 @@
 #include <vector>
 #include <queue>
 #include <unordered_map>
+#include <chrono>
 
 using namespace std;
 
@@ -9,6 +10,8 @@ using namespace std;
 #define lli long long int
 
 unordered_map<string, int> m;
+lli estadosExplorados = 0;
+lli estadosGerados = 0;
 
 void imprime(vvs &estado) {
     for (int i = 0; i < 6; i++) {
@@ -129,79 +132,14 @@ void fLinha(vvs &estado) {
 }
 
 int calculaPeso(vvs &estado) {
-    int peso = 0;
-    if (estado[0][2] == "Y" && estado[2][0] == "O" && estado[2][7] == "G") peso += 3;
-    else if (estado[0][2] == "Y") peso += 2;
-    else if (estado[0][2] != "W") peso += 1;
-    if (estado[0][3] == "Y" && estado[2][5] == "R" && estado[2][6] == "G") peso += 3;
-    else if (estado[0][3] == "Y") peso += 2;
-    else if (estado[0][3] != "W") peso += 1;
-    if (estado[1][2] == "Y" && estado[2][1] == "O" && estado[2][2] == "B") peso += 3;
-    else if (estado[1][2] == "Y") peso += 2;
-    else if (estado[1][2] != "W") peso += 1;
-    if (estado[1][3] == "Y" && estado[2][3] == "B" && estado[2][4] == "R") peso += 3;
-    else if (estado[1][3] == "Y") peso += 2;
-    else if (estado[1][3] != "W") peso += 1;
-    if (estado[2][0] == "O" && estado[0][2] == "Y" && estado[2][7] == "G") peso += 3;
-    else if (estado[2][0] == "O") peso += 2;
-    else if (estado[2][0] != "R") peso += 1;
-    if (estado[2][1] == "O" && estado[1][2] == "Y" && estado[2][2] == "B") peso += 3;
-    else if (estado[2][1] == "O") peso += 2;
-    else if (estado[2][1] != "R") peso += 1;
-    if (estado[3][0] == "O" && estado[5][2] == "W" && estado[3][7] == "G") peso += 3;
-    else if (estado[3][0] == "O") peso += 2;
-    else if (estado[3][0] != "R") peso += 1;
-    if (estado[3][1] == "O" && estado[3][2] == "B" && estado[4][2] == "W") peso += 3;
-    else if (estado[3][1] == "O") peso += 2;
-    else if (estado[3][1] != "R") peso += 1;
-    if (estado[2][2] == "B" && estado[1][2] == "Y" && estado[2][1] == "O") peso += 3;
-    else if (estado[2][2] == "B") peso += 2;
-    else if (estado[2][2] != "G") peso += 1;
-    if (estado[2][3] == "B" && estado[1][3] == "Y" && estado[2][4] == "R") peso += 3;
-    else if (estado[2][3] == "B") peso += 2;
-    else if (estado[2][3] != "G") peso += 1;
-    if (estado[3][2] == "B" && estado[3][1] == "O" && estado[4][2] == "W") peso += 3;
-    else if (estado[3][2] == "B") peso += 2;
-    else if (estado[3][2] != "G") peso += 1;
-    if (estado[3][3] == "B" && estado[3][4] == "R" && estado[4][3] == "W") peso += 3;
-    else if (estado[3][3] == "B") peso += 2;
-    else if (estado[3][3] != "G") peso += 1;
-    if (estado[2][4] == "R" && estado[1][3] == "Y" && estado[2][3] == "B") peso += 3;
-    else if (estado[2][4] == "R") peso += 2;
-    else if (estado[2][4] != "O") peso += 1;
-    if (estado[2][5] == "R" && estado[0][3] == "Y" && estado[2][6] == "G") peso += 3;
-    else if (estado[2][5] == "R") peso += 2;
-    else if (estado[2][5] != "O") peso += 1;
-    if (estado[3][4] == "R" && estado[3][3] == "B" && estado[4][3] == "W") peso += 3;
-    else if (estado[3][4] == "R") peso += 2;
-    else if (estado[3][4] != "O") peso += 1;
-    if (estado[3][5] == "R" && estado[3][6] == "G" && estado[5][3] == "W") peso += 3;
-    else if (estado[3][5] == "R") peso += 2;
-    else if (estado[3][5] != "O") peso += 1;
-    if (estado[2][6] == "G" && estado[0][3] == "Y" && estado[2][5] == "R") peso += 3;
-    else if (estado[2][6] == "G") peso += 2;
-    else if (estado[2][6] != "B") peso += 1;
-    if (estado[2][7] == "G" && estado[0][2] == "Y" && estado[2][0] == "O") peso += 3;
-    else if (estado[2][7] == "G") peso += 2;
-    else if (estado[2][7] != "B") peso += 1;
-    if (estado[3][6] == "G" && estado[3][5] == "R" && estado[5][3] == "W") peso += 3;
-    else if (estado[3][6] == "G") peso += 2;
-    else if (estado[3][6] != "B") peso += 1;
-    if (estado[3][7] == "G" && estado[3][0] == "O" && estado[5][2] == "W") peso += 3;
-    else if (estado[3][7] == "G") peso += 2;
-    else if (estado[3][7] != "B") peso += 1;
-    if (estado[4][2] == "W" && estado[3][1] == "O" && estado[3][2] == "B") peso += 3;
-    else if (estado[4][2] == "W") peso += 2;
-    else if (estado[4][2] != "Y") peso += 1;
-    if (estado[4][3] == "W" && estado[3][3] == "B" && estado[3][4] == "R") peso += 3;
-    else if (estado[4][3] == "W") peso += 2;
-    else if (estado[4][3] != "Y") peso += 1;
-    if (estado[5][2] == "W" && estado[3][0] == "O" && estado[3][7] == "G") peso += 3;
-    else if (estado[5][2] == "W") peso += 2;
-    else if (estado[5][2] != "Y") peso += 1;
-    if (estado[5][3] == "W" && estado[3][5] == "R" && estado[3][6] == "G") peso += 3;
-    else if (estado[5][3] == "W") peso += 2;
-    else if (estado[5][3] != "Y") peso += 1;
+    int peso = (estado[0][2] == "Y" && estado[2][0] == "O" && estado[2][7] == "G") +
+               (estado[0][3] == "Y" && estado[2][5] == "R" && estado[2][6] == "G") +
+               (estado[1][2] == "Y" && estado[2][1] == "O" && estado[2][2] == "B") +
+               (estado[1][3] == "Y" && estado[2][3] == "B" && estado[2][4] == "R") +
+               (estado[4][2] == "W" && estado[3][1] == "O" && estado[3][2] == "B") +
+               (estado[4][3] == "W" && estado[3][3] == "B" && estado[3][4] == "R") +
+               (estado[5][2] == "W" && estado[3][0] == "O" && estado[3][7] == "G") +
+               (estado[5][3] == "W" && estado[3][5] == "R" && estado[3][6] == "G");
     return peso;
 }
 
@@ -239,7 +177,8 @@ vector<string> buscaSolucao(vvs estado) {
     while (!pq.empty()) {
         auto front = pq.top();
         pq.pop();
-        if (front.first == 72) return front.second.first;
+        estadosExplorados++;
+        if (front.first == 8) return front.second.first;
         movimentos = front.second.first;
         int movimentosSize = movimentos.size();
         if (movimentosSize == 14) continue;
@@ -251,6 +190,7 @@ vector<string> buscaSolucao(vvs estado) {
             u(estado);
             id = calculaID(estado);
             if (visitados[id] == 0 || movimentosSize < visitados[id]) {
+                estadosGerados++;
                 movimentos[movimentosSize - 1] = "U";
                 pq.push({calculaPeso(estado), {movimentos, estado}});
                 visitados[id] = movimentosSize;
@@ -261,6 +201,7 @@ vector<string> buscaSolucao(vvs estado) {
             uLinha(estado);
             id = calculaID(estado);
             if (visitados[id] == 0 || movimentosSize < visitados[id]) {
+                estadosGerados++;
                 movimentos[movimentosSize - 1] = "U'";
                 pq.push({calculaPeso(estado), {movimentos, estado}});
                 visitados[id] = movimentosSize;
@@ -271,6 +212,7 @@ vector<string> buscaSolucao(vvs estado) {
             r(estado);
             id = calculaID(estado);
             if (visitados[id] == 0 || movimentosSize < visitados[id]) {
+                estadosGerados++;
                 movimentos[movimentosSize - 1] = "R";
                 pq.push({calculaPeso(estado), {movimentos, estado}});
                 visitados[id] = movimentosSize;
@@ -281,6 +223,7 @@ vector<string> buscaSolucao(vvs estado) {
             rLinha(estado);
             id = calculaID(estado);
             if (visitados[id] == 0 || movimentosSize < visitados[id]) {
+                estadosGerados++;
                 movimentos[movimentosSize - 1] = "R'";
                 pq.push({calculaPeso(estado), {movimentos, estado}});
                 visitados[id] = movimentosSize;
@@ -291,6 +234,7 @@ vector<string> buscaSolucao(vvs estado) {
             f(estado);
             id = calculaID(estado);
             if (visitados[id] == 0 || movimentosSize < visitados[id]) {
+                estadosGerados++;
                 movimentos[movimentosSize - 1] = "F";
                 pq.push({calculaPeso(estado), {movimentos, estado}});
                 visitados[id] = movimentosSize;
@@ -301,6 +245,7 @@ vector<string> buscaSolucao(vvs estado) {
             fLinha(estado);
             id = calculaID(estado);
             if (visitados[id] == 0 || movimentosSize < visitados[id]) {
+                estadosGerados++;
                 movimentos[movimentosSize - 1] = "F'";
                 pq.push({calculaPeso(estado), {movimentos, estado}});
                 visitados[id] = movimentosSize;
@@ -325,11 +270,17 @@ int main() {
             {" ", " ", "W", "B", " ", " ", " ", " "}            //{" ", " ", "W", "W", " ", " ", " ", " "}
     };
     imprime(estadoInicial);
+    auto t1 = chrono::high_resolution_clock::now();
     vector<string> resposta = buscaSolucao(estadoInicial);
+    auto t2 = chrono::high_resolution_clock::now();
+    auto fp_ms = chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
     if (resposta.empty()) {
         cout << "O cubo ja esta resolvido\n";
         return 0;
     }
+    cout << "Tempo de busca: " << fp_ms << "ms\n";
+    cout << "Numero de estados explorados: " << estadosExplorados << '\n';
+    cout << "Numero de estados gerados: " << estadosGerados << '\n';
     cout << "Solucao:";
     for (int i = 0; i < resposta.size(); i++) cout << ' ' << resposta[i];
     return 0;
