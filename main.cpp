@@ -132,15 +132,13 @@ void fLinha(vvs &estado) {
 }
 
 int calculaPeso(vvs &estado) {
-    int peso = (estado[0][2] == "Y" && estado[2][0] == "O" && estado[2][7] == "G") +
-               (estado[0][3] == "Y" && estado[2][5] == "R" && estado[2][6] == "G") +
-               (estado[1][2] == "Y" && estado[2][1] == "O" && estado[2][2] == "B") +
-               (estado[1][3] == "Y" && estado[2][3] == "B" && estado[2][4] == "R") +
-               (estado[4][2] == "W" && estado[3][1] == "O" && estado[3][2] == "B") +
-               (estado[4][3] == "W" && estado[3][3] == "B" && estado[3][4] == "R") +
-               (estado[5][2] == "W" && estado[3][0] == "O" && estado[3][7] == "G") +
-               (estado[5][3] == "W" && estado[3][5] == "R" && estado[3][6] == "G");
-    return peso;
+    return ((estado[0][2] == "Y" && estado[2][0] == "O" && estado[2][7] == "G") +
+            (estado[0][3] == "Y" && estado[2][5] == "R" && estado[2][6] == "G") +
+            (estado[1][2] == "Y" && estado[2][1] == "O" && estado[2][2] == "B") +
+            (estado[1][3] == "Y" && estado[2][3] == "B" && estado[2][4] == "R") +
+            (estado[4][2] == "W" && estado[3][1] == "O" && estado[3][2] == "B") +
+            (estado[4][3] == "W" && estado[3][3] == "B" && estado[3][4] == "R") +
+            (estado[5][3] == "W" && estado[3][5] == "R" && estado[3][6] == "G"));
 }
 
 lli calculaID(vvs &estado) {
@@ -153,13 +151,13 @@ lli calculaID(vvs &estado) {
         }
     }
     for (int i = 2; i <= 3; i++) {
-        for (int j = 0; j <= 7; j++) {
+        for (int j = i - 2; j <= 9 - i; j++) {
             id += (multiplicador * m[estado[i][j]]);
             multiplicador *= 6;
         }
     }
     for (int i = 4; i <= 5; i++) {
-        for (int j = 2; j <= 3; j++) {
+        for (int j = i - 2; j <= 3; j++) {
             id += (multiplicador * m[estado[i][j]]);
             multiplicador *= 6;
         }
@@ -178,7 +176,7 @@ vector<string> buscaSolucao(vvs estado) {
         auto front = pq.top();
         pq.pop();
         estadosExplorados++;
-        if (front.first == 8) return front.second.first;
+        if (front.first == 7) return front.second.first;
         movimentos = front.second.first;
         int movimentosSize = movimentos.size();
         if (movimentosSize == 14) continue;
@@ -279,6 +277,7 @@ int main() {
         return 0;
     }
     cout << "Tempo de busca: " << fp_ms << "ms\n";
+    cout << "Numero de movimentos para solucao: " << resposta.size() << '\n';
     cout << "Numero de estados explorados: " << estadosExplorados << '\n';
     cout << "Numero de estados gerados: " << estadosGerados << '\n';
     cout << "Solucao:";
