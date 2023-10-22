@@ -132,20 +132,28 @@ void fLinha(vvs &estado) {
 }
 
 int calculaPeso(vvs &estado) {
-    int peso = (estado[0][2] == estado[0][3] && estado[2][7] == estado[2][6]) +
-               (estado[0][2] == estado[1][2] && estado[2][0] == estado[2][1]) +
-               (estado[0][3] == estado[1][3] && estado[2][5] == estado[2][4]) +
-               (estado[1][2] == estado[1][3] && estado[2][2] == estado[2][3]) +
-               (estado[2][0] == estado[3][0] && estado[2][7] == estado[3][7]) +
-               (estado[2][1] == estado[3][1] && estado[2][2] == estado[3][2]) +
-               (estado[2][3] == estado[3][3] && estado[2][4] == estado[3][4]) +
-               (estado[2][5] == estado[3][5] && estado[2][6] == estado[3][6]) +
-               (estado[3][0] == estado[3][1] && estado[5][2] == estado[4][2]) +
-               (estado[3][2] == estado[3][3] && estado[4][2] == estado[4][3]) +
-               (estado[3][4] == estado[3][5] && estado[4][3] == estado[5][3]) +
-               (estado[3][6] == estado[3][7] && estado[5][3] == estado[5][2]);
-    if (peso % 4 == 0) return peso / 4;
-    return 0;
+    int peso = (estado[0][2] == "Y" && estado[2][0] == "O" && estado[2][7] == "G") +
+               (estado[0][3] == "Y" && estado[2][5] == "R" && estado[2][6] == "G") +
+               (estado[1][2] == "Y" && estado[2][1] == "O" && estado[2][2] == "B") +
+               (estado[1][3] == "Y" && estado[2][3] == "B" && estado[2][4] == "R") +
+               (estado[4][2] == "W" && estado[3][1] == "O" && estado[3][2] == "B") +
+               (estado[4][3] == "W" && estado[3][3] == "B" && estado[3][4] == "R") +
+               (estado[5][3] == "W" && estado[3][5] == "R" && estado[3][6] == "G");
+    if (peso == 7) return 3;
+    if (peso == 3) {
+        return 2 * (((estado[0][2] == "Y" && estado[2][0] == "O" && estado[2][7] == "G") &&
+                     (estado[1][2] == "Y" && estado[2][1] == "O" && estado[2][2] == "B") &&
+                     (estado[4][2] == "W" && estado[3][1] == "O" && estado[3][2] == "B")) ||
+                    ((estado[0][2] == "Y" && estado[2][0] == "O" && estado[2][7] == "G") &&
+                     (estado[0][3] == "Y" && estado[2][5] == "R" && estado[2][6] == "G") &&
+                     (estado[5][3] == "W" && estado[3][5] == "R" && estado[3][6] == "G")) ||
+                    ((estado[4][2] == "W" && estado[3][1] == "O" && estado[3][2] == "B") &&
+                     (estado[4][3] == "W" && estado[3][3] == "B" && estado[3][4] == "R") &&
+                     (estado[5][3] == "W" && estado[3][5] == "R" && estado[3][6] == "G")));
+    }
+    return (peso == 1 && ((estado[0][2] == "Y" && estado[2][0] == "O" && estado[2][7] == "G") ||
+                          (estado[4][2] == "W" && estado[3][1] == "O" && estado[3][2] == "B") ||
+                          (estado[5][3] == "W" && estado[3][5] == "R" && estado[3][6] == "G")));
 }
 
 lli calculaID(vvs &estado) {
