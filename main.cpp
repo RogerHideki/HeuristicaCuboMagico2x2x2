@@ -175,16 +175,15 @@ vector<string> buscaSolucao(vvs estado) {
     vector<string> movimentos;
     unordered_map<lli, int> visitados;
     lli id;
+    int peso;
     pq.push({calculaPeso(estado), {movimentos, estado}});
     visitados[calculaID(estado)] = -1;
     while (!pq.empty()) {
         auto front = pq.top();
         pq.pop();
         estadosExplorados++;
-        if (front.first == 12) return front.second.first;
         movimentos = front.second.first;
         int movimentosSize = movimentos.size();
-        if (movimentosSize == 14) continue;
         estado = front.second.second;
         string movimentoPai = (movimentosSize != 0) ? movimentos[movimentosSize - 1] : "";
         movimentosSize++;
@@ -192,10 +191,19 @@ vector<string> buscaSolucao(vvs estado) {
         if (movimentoPai != "U'") {
             u(estado);
             id = calculaID(estado);
-            if (visitados[id] == 0 || movimentosSize < visitados[id]) {
+            peso = calculaPeso(estado);
+            if ((visitados[id] == 0 || movimentosSize < visitados[id]) &&
+                ((movimentosSize == 12 && peso == 12) || (movimentosSize == 11 && (peso == 12 || peso == 8)) ||
+                 (movimentosSize == 10 && (peso == 12 || peso == 8 || peso == 4)) ||
+                 (movimentosSize == 9 && (peso == 12 || peso == 8 || (peso <= 4 && peso >= 2))) ||
+                 (movimentosSize == 8 && (peso == 12 || peso == 8 || peso == 6 || peso <= 4)) ||
+                 (movimentosSize == 7 && (peso == 12 || peso == 8 || peso == 6 || peso <= 4)) ||
+                 (movimentosSize <= 6 && movimentosSize >= 2 && (peso == 12 || peso == 8 || peso <= 6)) ||
+                 (movimentosSize <= 1))) {
                 estadosGerados++;
                 movimentos[movimentosSize - 1] = "U";
-                pq.push({calculaPeso(estado), {movimentos, estado}});
+                if (peso == 12) return movimentos;
+                pq.push({peso, {movimentos, estado}});
                 visitados[id] = movimentosSize;
             }
             uLinha(estado);
@@ -203,10 +211,19 @@ vector<string> buscaSolucao(vvs estado) {
         if (movimentoPai != "U") {
             uLinha(estado);
             id = calculaID(estado);
-            if (visitados[id] == 0 || movimentosSize < visitados[id]) {
+            peso = calculaPeso(estado);
+            if ((visitados[id] == 0 || movimentosSize < visitados[id]) &&
+                ((movimentosSize == 12 && peso == 12) || (movimentosSize == 11 && (peso == 12 || peso == 8)) ||
+                 (movimentosSize == 10 && (peso == 12 || peso == 8 || peso == 4)) ||
+                 (movimentosSize == 9 && (peso == 12 || peso == 8 || (peso <= 4 && peso >= 2))) ||
+                 (movimentosSize == 8 && (peso == 12 || peso == 8 || peso == 6 || peso <= 4)) ||
+                 (movimentosSize == 7 && (peso == 12 || peso == 8 || peso == 6 || peso <= 4)) ||
+                 (movimentosSize <= 6 && movimentosSize >= 2 && (peso == 12 || peso == 8 || peso <= 6)) ||
+                 (movimentosSize <= 1))) {
                 estadosGerados++;
                 movimentos[movimentosSize - 1] = "U'";
-                pq.push({calculaPeso(estado), {movimentos, estado}});
+                if (peso == 12) return movimentos;
+                pq.push({peso, {movimentos, estado}});
                 visitados[id] = movimentosSize;
             }
             u(estado);
@@ -214,10 +231,19 @@ vector<string> buscaSolucao(vvs estado) {
         if (movimentoPai != "R'") {
             r(estado);
             id = calculaID(estado);
-            if (visitados[id] == 0 || movimentosSize < visitados[id]) {
+            peso = calculaPeso(estado);
+            if ((visitados[id] == 0 || movimentosSize < visitados[id]) &&
+                ((movimentosSize == 12 && peso == 12) || (movimentosSize == 11 && (peso == 12 || peso == 8)) ||
+                 (movimentosSize == 10 && (peso == 12 || peso == 8 || peso == 4)) ||
+                 (movimentosSize == 9 && (peso == 12 || peso == 8 || (peso <= 4 && peso >= 2))) ||
+                 (movimentosSize == 8 && (peso == 12 || peso == 8 || peso == 6 || peso <= 4)) ||
+                 (movimentosSize == 7 && (peso == 12 || peso == 8 || peso == 6 || peso <= 4)) ||
+                 (movimentosSize <= 6 && movimentosSize >= 2 && (peso == 12 || peso == 8 || peso <= 6)) ||
+                 (movimentosSize <= 1))) {
                 estadosGerados++;
                 movimentos[movimentosSize - 1] = "R";
-                pq.push({calculaPeso(estado), {movimentos, estado}});
+                if (peso == 12) return movimentos;
+                pq.push({peso, {movimentos, estado}});
                 visitados[id] = movimentosSize;
             }
             rLinha(estado);
@@ -225,10 +251,19 @@ vector<string> buscaSolucao(vvs estado) {
         if (movimentoPai != "R") {
             rLinha(estado);
             id = calculaID(estado);
-            if (visitados[id] == 0 || movimentosSize < visitados[id]) {
+            peso = calculaPeso(estado);
+            if ((visitados[id] == 0 || movimentosSize < visitados[id]) &&
+                ((movimentosSize == 12 && peso == 12) || (movimentosSize == 11 && (peso == 12 || peso == 8)) ||
+                 (movimentosSize == 10 && (peso == 12 || peso == 8 || peso == 4)) ||
+                 (movimentosSize == 9 && (peso == 12 || peso == 8 || (peso <= 4 && peso >= 2))) ||
+                 (movimentosSize == 8 && (peso == 12 || peso == 8 || peso == 6 || peso <= 4)) ||
+                 (movimentosSize == 7 && (peso == 12 || peso == 8 || peso == 6 || peso <= 4)) ||
+                 (movimentosSize <= 6 && movimentosSize >= 2 && (peso == 12 || peso == 8 || peso <= 6)) ||
+                 (movimentosSize <= 1))) {
                 estadosGerados++;
                 movimentos[movimentosSize - 1] = "R'";
-                pq.push({calculaPeso(estado), {movimentos, estado}});
+                if (peso == 12) return movimentos;
+                pq.push({peso, {movimentos, estado}});
                 visitados[id] = movimentosSize;
             }
             r(estado);
@@ -236,10 +271,19 @@ vector<string> buscaSolucao(vvs estado) {
         if (movimentoPai != "F'") {
             f(estado);
             id = calculaID(estado);
-            if (visitados[id] == 0 || movimentosSize < visitados[id]) {
+            peso = calculaPeso(estado);
+            if ((visitados[id] == 0 || movimentosSize < visitados[id]) &&
+                ((movimentosSize == 12 && peso == 12) || (movimentosSize == 11 && (peso == 12 || peso == 8)) ||
+                 (movimentosSize == 10 && (peso == 12 || peso == 8 || peso == 4)) ||
+                 (movimentosSize == 9 && (peso == 12 || peso == 8 || (peso <= 4 && peso >= 2))) ||
+                 (movimentosSize == 8 && (peso == 12 || peso == 8 || peso == 6 || peso <= 4)) ||
+                 (movimentosSize == 7 && (peso == 12 || peso == 8 || peso == 6 || peso <= 4)) ||
+                 (movimentosSize <= 6 && movimentosSize >= 2 && (peso == 12 || peso == 8 || peso <= 6)) ||
+                 (movimentosSize <= 1))) {
                 estadosGerados++;
                 movimentos[movimentosSize - 1] = "F";
-                pq.push({calculaPeso(estado), {movimentos, estado}});
+                if (peso == 12) return movimentos;
+                pq.push({peso, {movimentos, estado}});
                 visitados[id] = movimentosSize;
             }
             fLinha(estado);
@@ -247,10 +291,19 @@ vector<string> buscaSolucao(vvs estado) {
         if (movimentoPai != "F") {
             fLinha(estado);
             id = calculaID(estado);
-            if (visitados[id] == 0 || movimentosSize < visitados[id]) {
+            peso = calculaPeso(estado);
+            if ((visitados[id] == 0 || movimentosSize < visitados[id]) &&
+                ((movimentosSize == 12 && peso == 12) || (movimentosSize == 11 && (peso == 12 || peso == 8)) ||
+                 (movimentosSize == 10 && (peso == 12 || peso == 8 || peso == 4)) ||
+                 (movimentosSize == 9 && (peso == 12 || peso == 8 || (peso <= 4 && peso >= 2))) ||
+                 (movimentosSize == 8 && (peso == 12 || peso == 8 || peso == 6 || peso <= 4)) ||
+                 (movimentosSize == 7 && (peso == 12 || peso == 8 || peso == 6 || peso <= 4)) ||
+                 (movimentosSize <= 6 && movimentosSize >= 2 && (peso == 12 || peso == 8 || peso <= 6)) ||
+                 (movimentosSize <= 1))) {
                 estadosGerados++;
                 movimentos[movimentosSize - 1] = "F'";
-                pq.push({calculaPeso(estado), {movimentos, estado}});
+                if (peso == 12) return movimentos;
+                pq.push({peso, {movimentos, estado}});
                 visitados[id] = movimentosSize;
             }
         }
