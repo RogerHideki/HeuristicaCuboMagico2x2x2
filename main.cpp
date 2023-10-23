@@ -132,28 +132,18 @@ void fLinha(vvs &estado) {
 }
 
 int calculaPeso(vvs &estado) {
-    int peso = (estado[0][2] == "Y" && estado[2][0] == "O" && estado[2][7] == "G") +
-               (estado[0][3] == "Y" && estado[2][5] == "R" && estado[2][6] == "G") +
-               (estado[1][2] == "Y" && estado[2][1] == "O" && estado[2][2] == "B") +
-               (estado[1][3] == "Y" && estado[2][3] == "B" && estado[2][4] == "R") +
-               (estado[4][2] == "W" && estado[3][1] == "O" && estado[3][2] == "B") +
-               (estado[4][3] == "W" && estado[3][3] == "B" && estado[3][4] == "R") +
-               (estado[5][3] == "W" && estado[3][5] == "R" && estado[3][6] == "G");
-    if (peso == 7) return 3;
-    if (peso == 3) {
-        return 2 * (((estado[0][2] == "Y" && estado[2][0] == "O" && estado[2][7] == "G") &&
-                     (estado[1][2] == "Y" && estado[2][1] == "O" && estado[2][2] == "B") &&
-                     (estado[4][2] == "W" && estado[3][1] == "O" && estado[3][2] == "B")) ||
-                    ((estado[0][2] == "Y" && estado[2][0] == "O" && estado[2][7] == "G") &&
-                     (estado[0][3] == "Y" && estado[2][5] == "R" && estado[2][6] == "G") &&
-                     (estado[5][3] == "W" && estado[3][5] == "R" && estado[3][6] == "G")) ||
-                    ((estado[4][2] == "W" && estado[3][1] == "O" && estado[3][2] == "B") &&
-                     (estado[4][3] == "W" && estado[3][3] == "B" && estado[3][4] == "R") &&
-                     (estado[5][3] == "W" && estado[3][5] == "R" && estado[3][6] == "G")));
-    }
-    return (peso == 1 && ((estado[0][2] == "Y" && estado[2][0] == "O" && estado[2][7] == "G") ||
-                          (estado[4][2] == "W" && estado[3][1] == "O" && estado[3][2] == "B") ||
-                          (estado[5][3] == "W" && estado[3][5] == "R" && estado[3][6] == "G")));
+    return ((estado[0][2] == estado[0][3] && estado[2][7] == estado[2][6]) +
+            (estado[0][2] == estado[1][2] && estado[2][0] == estado[2][1]) +
+            (estado[0][3] == estado[1][3] && estado[2][5] == estado[2][4]) +
+            (estado[1][2] == estado[1][3] && estado[2][2] == estado[2][3]) +
+            (estado[2][0] == estado[3][0] && estado[2][7] == estado[3][7]) +
+            (estado[2][1] == estado[3][1] && estado[2][2] == estado[3][2]) +
+            (estado[2][3] == estado[3][3] && estado[2][4] == estado[3][4]) +
+            (estado[2][5] == estado[3][5] && estado[2][6] == estado[3][6]) +
+            (estado[3][0] == estado[3][1] && estado[5][2] == estado[4][2]) +
+            (estado[3][2] == estado[3][3] && estado[4][2] == estado[4][3]) +
+            (estado[3][4] == estado[3][5] && estado[4][3] == estado[5][3]) +
+            (estado[3][6] == estado[3][7] && estado[5][3] == estado[5][2]));
 }
 
 lli calculaID(vvs &estado) {
@@ -191,7 +181,7 @@ vector<string> buscaSolucao(vvs estado) {
         auto front = pq.top();
         pq.pop();
         estadosExplorados++;
-        if (front.first == 3) return front.second.first;
+        if (front.first == 12) return front.second.first;
         movimentos = front.second.first;
         int movimentosSize = movimentos.size();
         if (movimentosSize == 14) continue;
@@ -275,12 +265,61 @@ int main() {
     m["G"] = 4;
     m["W"] = 5;
     vvs estadoInicial = {
-            {" ", " ", "G", "R", " ", " ", " ", " "},
+//            {" ", " ", "B", "R", " ", " ", " ", " "},
+//            {" ", " ", "O", "Y", " ", " ", " ", " "},
+//            {"O", "G", "W", "B", "R", "G", "Y", "Y"},
+//            {"G", "W", "B", "O", "B", "Y", "O", "R"},
+//            {" ", " ", "R", "W", " ", " ", " ", " "},
+//            {" ", " ", "W", "G", " ", " ", " ", " "}
+
+//            {" ", " ", "Y", "R", " ", " ", " ", " "},
+//            {" ", " ", "Y", "O", " ", " ", " ", " "},
+//            {"B", "R", "G", "Y", "G", "W", "G", "O"},
+//            {"O", "Y", "R", "B", "W", "R", "W", "G"},
+//            {" ", " ", "B", "O", " ", " ", " ", " "},
+//            {" ", " ", "W", "B", " ", " ", " ", " "}
+
+//            {" ", " ", "O", "Y", " ", " ", " ", " "},
+//            {" ", " ", "B", "R", " ", " ", " ", " "},
+//            {"Y", "R", "Y", "W", "G", "G", "O", "B"},
+//            {"O", "R", "W", "W", "O", "R", "Y", "G"},
+//            {" ", " ", "B", "B", " ", " ", " ", " "},
+//            {" ", " ", "W", "G", " ", " ", " ", " "}
+
+            {" ", " ", "Y", "W", " ", " ", " ", " "},
             {" ", " ", "W", "G", " ", " ", " ", " "},
-            {"R", "G", "R", "O", "Y", "B", "W", "Y"},
-            {"O", "Y", "R", "B", "O", "W", "O", "G"},
-            {" ", " ", "B", "Y", " ", " ", " ", " "},
-            {" ", " ", "W", "B", " ", " ", " ", " "}
+            {"R", "B", "O", "Y", "R", "R", "B", "B"},
+            {"O", "B", "O", "G", "Y", "G", "W", "G"},
+            {" ", " ", "Y", "O", " ", " ", " ", " "},
+            {" ", " ", "W", "R", " ", " ", " ", " "}
+
+//            {" ", " ", "W", "W", " ", " ", " ", " "},
+//            {" ", " ", "Y", "Y", " ", " ", " ", " "},
+//            {"O", "B", "R", "O", "B", "R", "B", "B"},
+//            {"O", "O", "G", "G", "R", "R", "G", "G"},
+//            {" ", " ", "Y", "Y", " ", " ", " ", " "},
+//            {" ", " ", "W", "W", " ", " ", " ", " "}
+
+//            {" ", " ", "B", "B", " ", " ", " ", " "},
+//            {" ", " ", "R", "R", " ", " ", " ", " "},
+//            {"Y", "W", "G", "B", "W", "Y", "O", "R"},
+//            {"O", "G", "Y", "R", "Y", "B", "W", "G"},
+//            {" ", " ", "O", "G", " ", " ", " ", " "},
+//            {" ", " ", "W", "O", " ", " ", " ", " "}
+
+//            {" ", " ", "B", "B", " ", " ", " ", " "},
+//            {" ", " ", "R", "R", " ", " ", " ", " "},
+//            {"R", "G", "Y", "W", "G", "Y", "O", "W"},
+//            {"O", "Y", "O", "B", "Y", "B", "W", "G"},
+//            {" ", " ", "G", "R", " ", " ", " ", " "},
+//            {" ", " ", "W", "O", " ", " ", " ", " "}
+
+//            {" ", " ", "B", "G", " ", " ", " ", " "},
+//            {" ", " ", "G", "B", " ", " ", " ", " "},
+//            {"Y", "O", "Y", "Y", "O", "Y", "R", "R"},
+//            {"O", "B", "R", "G", "W", "W", "O", "G"},
+//            {" ", " ", "W", "R", " ", " ", " ", " "},
+//            {" ", " ", "W", "B", " ", " ", " ", " "}
     };
     imprime(estadoInicial);
     auto t1 = chrono::high_resolution_clock::now();
