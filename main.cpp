@@ -170,15 +170,15 @@ lli calculaID(vvs &estado) {
     return id;
 }
 
-vector<string> buscaSolucao(vvs estado) {
+vector<string> buscaSolucao(vvs &estado) {
     priority_queue<pair<int, pair<int, pair<int, vvs>>>> pq;
     int peso;
     int movimentoPai;
     int nMovimentos;
-    unordered_map<lli, int> visitados;
+    unordered_map<lli, pair<int, int>> visitados;
     lli id;
     pq.push({calculaPeso(estado), {-1, {0, estado}}});
-    visitados[calculaID(estado)] = -1;
+    visitados[calculaID(estado)] = {-1, -1};
     while (!pq.empty()) {
         auto front = pq.top();
         pq.pop();
@@ -191,7 +191,7 @@ vector<string> buscaSolucao(vvs estado) {
             u(estado);
             id = calculaID(estado);
             peso = calculaPeso(estado);
-            if (visitados[id] == 0 || nMovimentos < visitados[id]) {
+            if (visitados[id].first == 0 || nMovimentos < visitados[id].first) {
                 if (peso == 12) {
                     estadosGerados++;
                     movimentoPai = 0;
@@ -203,7 +203,7 @@ vector<string> buscaSolucao(vvs estado) {
                     (peso == 2 && nMovimentos <= 11) || (peso <= 1 && nMovimentos <= 10)) {
                     estadosGerados++;
                     pq.push({peso, {0, {nMovimentos, estado}}});
-                    visitados[id] = nMovimentos;
+                    visitados[id] = {nMovimentos, 0};
                 }
             }
             uLinha(estado);
@@ -212,7 +212,7 @@ vector<string> buscaSolucao(vvs estado) {
             uLinha(estado);
             id = calculaID(estado);
             peso = calculaPeso(estado);
-            if (visitados[id] == 0 || nMovimentos < visitados[id]) {
+            if (visitados[id].first == 0 || nMovimentos < visitados[id].first) {
                 if (peso == 12) {
                     estadosGerados++;
                     movimentoPai = 1;
@@ -224,7 +224,7 @@ vector<string> buscaSolucao(vvs estado) {
                     (peso == 2 && nMovimentos <= 11) || (peso <= 1 && nMovimentos <= 10)) {
                     estadosGerados++;
                     pq.push({peso, {1, {nMovimentos, estado}}});
-                    visitados[id] = nMovimentos;
+                    visitados[id] = {nMovimentos, 1};
                 }
             }
             u(estado);
@@ -233,7 +233,7 @@ vector<string> buscaSolucao(vvs estado) {
             r(estado);
             id = calculaID(estado);
             peso = calculaPeso(estado);
-            if (visitados[id] == 0 || nMovimentos < visitados[id]) {
+            if (visitados[id].first == 0 || nMovimentos < visitados[id].first) {
                 if (peso == 12) {
                     estadosGerados++;
                     movimentoPai = 2;
@@ -245,7 +245,7 @@ vector<string> buscaSolucao(vvs estado) {
                     (peso == 2 && nMovimentos <= 11) || (peso <= 1 && nMovimentos <= 10)) {
                     estadosGerados++;
                     pq.push({peso, {2, {nMovimentos, estado}}});
-                    visitados[id] = nMovimentos;
+                    visitados[id] = {nMovimentos, 2};
                 }
             }
             rLinha(estado);
@@ -254,7 +254,7 @@ vector<string> buscaSolucao(vvs estado) {
             rLinha(estado);
             id = calculaID(estado);
             peso = calculaPeso(estado);
-            if (visitados[id] == 0 || nMovimentos < visitados[id]) {
+            if (visitados[id].first == 0 || nMovimentos < visitados[id].first) {
                 if (peso == 12) {
                     estadosGerados++;
                     movimentoPai = 3;
@@ -266,7 +266,7 @@ vector<string> buscaSolucao(vvs estado) {
                     (peso == 2 && nMovimentos <= 11) || (peso <= 1 && nMovimentos <= 10)) {
                     estadosGerados++;
                     pq.push({peso, {3, {nMovimentos, estado}}});
-                    visitados[id] = nMovimentos;
+                    visitados[id] = {nMovimentos, 3};
                 }
             }
             r(estado);
@@ -275,7 +275,7 @@ vector<string> buscaSolucao(vvs estado) {
             f(estado);
             id = calculaID(estado);
             peso = calculaPeso(estado);
-            if (visitados[id] == 0 || nMovimentos < visitados[id]) {
+            if (visitados[id].first == 0 || nMovimentos < visitados[id].first) {
                 if (peso == 12) {
                     estadosGerados++;
                     movimentoPai = 4;
@@ -287,7 +287,7 @@ vector<string> buscaSolucao(vvs estado) {
                     (peso == 2 && nMovimentos <= 11) || (peso <= 1 && nMovimentos <= 10)) {
                     estadosGerados++;
                     pq.push({peso, {4, {nMovimentos, estado}}});
-                    visitados[id] = nMovimentos;
+                    visitados[id] = {nMovimentos, 4};
                 }
             }
             fLinha(estado);
@@ -296,7 +296,7 @@ vector<string> buscaSolucao(vvs estado) {
             fLinha(estado);
             id = calculaID(estado);
             peso = calculaPeso(estado);
-            if (visitados[id] == 0 || nMovimentos < visitados[id]) {
+            if (visitados[id].first == 0 || nMovimentos < visitados[id].first) {
                 if (peso == 12) {
                     estadosGerados++;
                     movimentoPai = 5;
@@ -308,12 +308,36 @@ vector<string> buscaSolucao(vvs estado) {
                     (peso == 2 && nMovimentos <= 11) || (peso <= 1 && nMovimentos <= 10)) {
                     estadosGerados++;
                     pq.push({peso, {5, {nMovimentos, estado}}});
-                    visitados[id] = nMovimentos;
+                    visitados[id] = {nMovimentos, 5};
                 }
             }
         }
     }
-    return {};
+    if (calculaPeso(estado) != 12) return {};
+    vector<string> resposta(nMovimentos);
+    for (int i = nMovimentos - 1; i >= 0; i--) {
+        if (movimentoPai == 0) {
+            resposta[i] = "U";
+            uLinha(estado);
+        } else if (movimentoPai == 1) {
+            resposta[i] = "U'";
+            u(estado);
+        } else if (movimentoPai == 2) {
+            resposta[i] = "R";
+            rLinha(estado);
+        } else if (movimentoPai == 3) {
+            resposta[i] = "R'";
+            r(estado);
+        } else if (movimentoPai == 4) {
+            resposta[i] = "F";
+            fLinha(estado);
+        } else {
+            resposta[i] = "F'";
+            f(estado);
+        };
+        movimentoPai = visitados[calculaID(estado)].second;
+    }
+    return resposta;
 }
 
 int main() {
@@ -324,12 +348,12 @@ int main() {
     m["G"] = 4;
     m["W"] = 5;
     vvs estadoInicial = {
-//            {" ", " ", "B", "R", " ", " ", " ", " "},
-//            {" ", " ", "O", "Y", " ", " ", " ", " "},
-//            {"O", "G", "W", "B", "R", "G", "Y", "Y"},
-//            {"G", "W", "B", "O", "B", "Y", "O", "R"},
-//            {" ", " ", "R", "W", " ", " ", " ", " "},
-//            {" ", " ", "W", "G", " ", " ", " ", " "}
+            {" ", " ", "B", "R", " ", " ", " ", " "},
+            {" ", " ", "O", "Y", " ", " ", " ", " "},
+            {"O", "G", "W", "B", "R", "G", "Y", "Y"},
+            {"G", "W", "B", "O", "B", "Y", "O", "R"},
+            {" ", " ", "R", "W", " ", " ", " ", " "},
+            {" ", " ", "W", "G", " ", " ", " ", " "}
 
 //            {" ", " ", "Y", "R", " ", " ", " ", " "},
 //            {" ", " ", "Y", "O", " ", " ", " ", " "},
@@ -345,12 +369,12 @@ int main() {
 //            {" ", " ", "B", "B", " ", " ", " ", " "},
 //            {" ", " ", "W", "G", " ", " ", " ", " "}
 
-            {" ", " ", "Y", "W", " ", " ", " ", " "},
-            {" ", " ", "W", "G", " ", " ", " ", " "},
-            {"R", "B", "O", "Y", "R", "R", "B", "B"},
-            {"O", "B", "O", "G", "Y", "G", "W", "G"},
-            {" ", " ", "Y", "O", " ", " ", " ", " "},
-            {" ", " ", "W", "R", " ", " ", " ", " "}
+//            {" ", " ", "Y", "W", " ", " ", " ", " "},
+//            {" ", " ", "W", "G", " ", " ", " ", " "},
+//            {"R", "B", "O", "Y", "R", "R", "B", "B"},
+//            {"O", "B", "O", "G", "Y", "G", "W", "G"},
+//            {" ", " ", "Y", "O", " ", " ", " ", " "},
+//            {" ", " ", "W", "R", " ", " ", " ", " "}
 
 //            {" ", " ", "W", "W", " ", " ", " ", " "},
 //            {" ", " ", "Y", "Y", " ", " ", " ", " "},
@@ -381,19 +405,23 @@ int main() {
 //            {" ", " ", "W", "B", " ", " ", " ", " "}
     };
     imprime(estadoInicial);
+    if (calculaPeso(estadoInicial) == 12) {
+        cout << "O cubo ja esta resolvido\n";
+        return 0;
+    }
     auto t1 = chrono::high_resolution_clock::now();
     vector<string> resposta = buscaSolucao(estadoInicial);
     auto t2 = chrono::high_resolution_clock::now();
     auto fp_ms = chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
-//    if (resposta.empty()) {
-//        cout << "O cubo ja esta resolvido\n";
-//        return 0;
-//    }
+    if (resposta.empty()) {
+        cout << "Cubo invalido\n";
+        return 0;
+    }
     cout << "Tempo de busca: " << fp_ms << "ms\n";
-    //cout << "Numero de movimentos para solucao: " << resposta.size() << '\n';
+    cout << "Numero de movimentos para solucao: " << resposta.size() << '\n';
     cout << "Numero de estados explorados: " << estadosExplorados << '\n';
     cout << "Numero de estados gerados: " << estadosGerados << '\n';
     cout << "Solucao:";
-    //for (int i = 0; i < resposta.size(); i++) cout << ' ' << resposta[i];
+    for (int i = 0; i < resposta.size(); i++) cout << ' ' << resposta[i];
     return 0;
 }
